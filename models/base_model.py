@@ -11,12 +11,23 @@ import models
 class BaseModel:
 	"""BaseModel Class"""
 
-	def __init__(self):
-		"""for Public instance attributes
+	def __init__(self, *args, **kwargs):
+		"""Instance Constructor
 		"""
-		self.id = str(uuid4())
-		self.created_at = datetime.now()
-		self.updated_at = datetime.now()
+		if kwargs:
+			for key, value in kwargs.items():
+				if key != "__class__":
+					if key == "updated_at":
+						self.updated_at = datetime.fromisoformat(value)
+					elif key == "created_at":
+						self.created_at = datetime.fromisoformat(value)
+					else:
+						setattr(self, key, value)
+		else:
+			self.id = str(uuid4())
+			self.created_at = datetime.now()
+			self.updated_at = datetime.now()
+			models.storage.new(self)
 
 	def __str__(self):
 		"""__str__
