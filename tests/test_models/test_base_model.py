@@ -7,6 +7,21 @@ from datetime import datetime
 
 
 class TestBaseModel(unittest.TestCase):
+    def test_create_instance_with_kwargs(self):
+        """
+        create an instance of class using kwargs
+        """
+        my_base_json = self.base.to_dict()
+        new_base = BaseModel(**my_base_json)
+        self.assertIsInstance(new_base, BaseModel)
+        self.assertIsInstance(new_base.id, str)
+        self.assertIsInstance(new_base.created_at, datetime)
+        self.assertIsInstance(new_base.updated_at, datetime)
+        self.assertEqual(new_base.name, "My First Model")
+        self.assertEqual(new_base.my_number, 89)
+        self.assertNotEqual(new_base, self.base)
+        self.assertDictEqual(new_base.__dict__, self.base.__dict__)
+
     def test_to_dict(self):
         """
             test to_dict class method
